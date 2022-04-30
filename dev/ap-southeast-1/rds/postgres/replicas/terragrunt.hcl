@@ -16,7 +16,7 @@ dependency "vpc" {
 }
 
 dependency "master" {
-	config_path = "../master"
+  config_path = "../master"
 }
 
 locals {
@@ -48,7 +48,7 @@ inputs = {
   storage_encrypted     = false
 
   # Username and password should not be set for replicas
-  port     = local.port
+  port = local.port
 
   multi_az               = false
   db_subnet_group_name   = dependency.vpc.outputs.database_subnet_group_name
