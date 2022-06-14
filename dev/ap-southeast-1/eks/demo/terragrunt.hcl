@@ -1,5 +1,5 @@
 terraform {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git//?ref=v17.19.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git//?ref=v18.23.0"
 }
 
 include {
@@ -9,6 +9,10 @@ include {
 
 dependency "vpc" {
   config_path = "../../vpc"
+}
+
+dependency "allow_ssh_sg" {
+  config_path = "../../sg/allow-ssh"
 }
 
 locals {
@@ -41,29 +45,28 @@ EOF
 
 inputs = {
   cluster_name    = local.cluster_name
-  cluster_version = "1.18"
-  subnets         = dependency.vpc.outputs.public_subnets
+  cluster_version = "1.21"
+  subnet_ids         = dependency.vpc.outputs.public_subnets
   vpc_id          = dependency.vpc.outputs.vpc_id
   manage_aws_auth = true
 
-  worker_groups = [
-    {
-      name                 = "worker-group-1"
-      instance_type        = "t3.large"
-      asg_desired_capacity = 1
-      spot_price           = "0.1"
-      kubelet_extra_args   = "--node-labels=node.kubernetes.io/lifecycle=spot"
-      suspended_processes  = ["AZRebalance"]
-    },
-    {
-      name                 = "worker-group-2"
-      instance_type        = "t3.large"
-      asg_desired_capacity = 1
-      spot_price           = "0.1"
-      kubelet_extra_args   = "--node-labels=node.kubernetes.io/lifecycle=spot"
-      suspended_processes  = ["AZRebalance"]
-    },
-  ]
+  eks_managed_node_group_defaults = {
+    key_name = "linhnv"
+    vpc_security_group_ids = [
+      "${dependency.allow_ssh_sg.outputs.security_group_id}",
+    ]
+  }
+
+  eks_managed_node_groups = {
+    node_group_1 = {
+      min_size = 3
+      max_size = 3
+      desired_size=3
+
+      instance_types = ["t3.large"]
+      capacity_type="SPOT"
+    }
+  }
 
   tags = {
     Terraform   = "true"

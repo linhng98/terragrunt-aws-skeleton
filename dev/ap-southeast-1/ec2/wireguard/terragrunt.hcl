@@ -28,11 +28,10 @@ dependency "allow_wireguard_sg" {
 }
 
 inputs = {
-  name          = "wireguard-gw"
   ami           = "ami-055d15d9cfddf7bd3"
   instance_type = "t2.medium"
 
-  create_spot_instance = true
+  create_spot_instance = false
   spot_price           = "0.60"
   spot_type            = "persistent"
 
@@ -46,10 +45,4 @@ inputs = {
   ]
   subnet_id = dependency.vpc.outputs.public_subnets[0]
   key_name  = "linhnv"
-
-  tags = {
-    Terraform   = "true"
-    Environment = include.inputs.env
-    Owner       = include.inputs.account_name
-  }
 }

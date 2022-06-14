@@ -11,8 +11,8 @@ locals {
   # Automatically load region-level variables
   region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl"))
 
-  # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
+  # Automatically load tags variables
+  tags = read_terragrunt_config(find_in_parent_folders("tags.hcl"))
 
   # Extract the variables we need for easy access
   account_name = local.account_vars.locals.account_name
@@ -66,5 +66,5 @@ terragrunt_version_constraint = ">= 0.31.0"
 inputs = merge(
   local.account_vars.locals,
   local.region_vars.locals,
-  local.environment_vars.locals,
+  local.tags.locals,
 )
