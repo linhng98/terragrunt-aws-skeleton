@@ -1,5 +1,5 @@
 terraform {
-  source = "git::https://github.com/terraform-aws-modules/terraform-aws-rds.git//?ref=v3.4.0"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-rds.git//?ref=v4.4.0"
 }
 
 include {
@@ -22,9 +22,9 @@ dependency "master" {
 locals {
   name                  = "postgresql"
   engine                = "postgres"
-  engine_version        = "11.10"
-  family                = "postgres11" # DB parameter group
-  major_engine_version  = "11"         # DB option group
+  engine_version        = "14.2"
+  family                = "postgres14.2" # DB parameter group
+  major_engine_version  = "14.2"         # DB option group
   instance_class        = "db.t3.large"
   allocated_storage     = 20
   max_allocated_storage = 100
@@ -56,7 +56,7 @@ inputs = {
   vpc_security_group_ids = ["${dependency.postgres_allow_internal_access_sg.outputs.security_group_id}"]
 
   maintenance_window              = "Tue:00:00-Tue:03:00"
-  backup_window                   = "03:00-06:00"
+  backup_window                   = "00:00-03:00"
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
   backup_retention_period = 0
@@ -65,10 +65,5 @@ inputs = {
 
   # Not allowed to specify a subnet group for replicas in the same region
   create_db_subnet_group = false
-
-  tags = {
-    Terraform   = "true"
-    Environment = include.inputs.env
-    Owner       = include.inputs.account_name
-  }
+  create_db_parameter_group = false
 }
