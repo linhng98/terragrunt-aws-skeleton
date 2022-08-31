@@ -64,6 +64,6 @@ inputs = {
   deletion_protection     = false
 
   # Not allowed to specify a subnet group for replicas in the same region
-  create_db_subnet_group = false
+  create_db_subnet_group    = false
   create_db_parameter_group = false
 }

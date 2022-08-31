@@ -46,7 +46,7 @@ EOF
 inputs = {
   cluster_name    = local.cluster_name
   cluster_version = "1.21"
-  subnet_ids         = dependency.vpc.outputs.public_subnets
+  subnet_ids      = dependency.vpc.outputs.public_subnets
   vpc_id          = dependency.vpc.outputs.vpc_id
   manage_aws_auth = true
 
@@ -59,12 +59,12 @@ inputs = {
 
   eks_managed_node_groups = {
     node_group_1 = {
-      min_size = 3
-      max_size = 3
-      desired_size=3
+      min_size     = 3
+      max_size     = 3
+      desired_size = 3
 
       instance_types = ["t3.large"]
-      capacity_type="SPOT"
+      capacity_type  = "SPOT"
     }
   }
 

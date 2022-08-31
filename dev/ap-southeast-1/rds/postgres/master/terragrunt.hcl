@@ -45,12 +45,12 @@ inputs = {
   password = "RandomStronkPassword"
   port     = local.port
 
-  multi_az               = true
-  create_db_subnet_group = false
+  multi_az                  = true
+  create_db_subnet_group    = false
   create_db_parameter_group = false
-  db_subnet_group_name   = dependency.vpc.outputs.database_subnet_group_name
-  subnet_ids             = dependency.vpc.outputs.database_subnets
-  vpc_security_group_ids = ["${dependency.postgres_allow_internal_access_sg.outputs.security_group_id}"]
+  db_subnet_group_name      = dependency.vpc.outputs.database_subnet_group_name
+  subnet_ids                = dependency.vpc.outputs.database_subnets
+  vpc_security_group_ids    = ["${dependency.postgres_allow_internal_access_sg.outputs.security_group_id}"]
 
   maintenance_window              = "Sat:18:00-Sat:21:00"
   backup_window                   = "00:00-03:00"
